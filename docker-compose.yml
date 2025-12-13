@@ -8,13 +8,16 @@ services:
       GITEA_INSTANCE_URL: "${GITEA_INSTANCE_URL}" 
       GITEA_RUNNER_REGISTRATION_TOKEN: "${RUNNER_TOKEN}"
       GITEA_RUNNER_NAME: "home-server-runner"
+      # GITEA_RUNNER_LABELS: "${RUNNER_LABELS}"
+    ports:
+      - "8088:8088"
     volumes:
       - ./config.yaml:/config.yaml
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - gitea_network
+      - gitea_gitea #gitea_network
 
 networks:
-  gitea_network:
+  gitea_gitea: #gitea_network
     external: true

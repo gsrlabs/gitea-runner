@@ -1,2 +1,4 @@
 .env
 my_config
+data
+config.yaml

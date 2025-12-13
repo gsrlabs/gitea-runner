@@ -41,7 +41,7 @@
 
 ### 1. Клонирование репозитория
 ```bash
-cd /home/gsr/hub/
+cd /home/your/directory/
 git clone https://github.com/gsrlabs/gitea-runner.git gitea-runner
 cd gitea-runner
 ```
@@ -49,17 +49,17 @@ cd gitea-runner
 ### 2. Проверка сети Gitea
 Перед запуском убедитесь, что существует сеть Gitea:
 ```bash
-docker network ls | grep gitea_gitea
+docker network ls | grep gitea_gitea # или gitea_network
 ```
 Если сети нет, создайте её:
 ```bash
-docker network create gitea_gitea
+docker network create gitea_gitea # или gitea_network
 ```
 
 ### 3. Настройка переменных окружения
-Создайте файл `.env` на основе примера:
+Создайте файл `.env`:
 ```bash
-cp .env.example .env
+touch .env
 nano .env
 ```
 
@@ -70,7 +70,7 @@ RUNNER_TOKEN="YOUR_TOKEN_REGISTRATION"
 GITEA_INSTANCE_URL="https://gitea.your-domain.com"
 
 # Опциональные настройки
-RUNNER_LABELS="ubuntu-latest:docker://node:20-bullseye"
+RUNNER_LABELS="ubuntu-latest:docker://node:20-bullseye,ubuntu-22.04:docker://node:20-bullseye,self-hosted"
 ```
 
 ### 4. Получение токена регистрации
@@ -109,7 +109,7 @@ nano config.yaml
 Ключевые параметры:
 ```yaml
 container:
-  network: "gitea_gitea"  # Сеть должна совпадать с сетью Gitea
+  network: "gitea_gitea"  # /gitea_network Сеть должна совпадать с сетью Gitea
   # Дополнительные настройки (необязательно):
   # privileged: false      # Запускать контейнеры в привилегированном режиме
   # options:              # Дополнительные опции Docker
@@ -159,7 +159,7 @@ docker run --rm gitea/act_runner:latest act_runner list-images
 cache:
   enabled: true
   dir: ""
-  host: "192.168.0.105"  # IP-адрес вашего сервера
+  host: "192.168.0.105"  # IP-адрес вашего сервера, замените на свой
   port: 8088
 ```
 
@@ -193,7 +193,51 @@ services:
       - ./config.yaml:/config.yaml
       - /var/run/docker.sock:/var/run/docker.sock
 ```
+### Пример готового конфига
+```yaml
+log:
+  level: info
 
+runner:
+  file: .runner
+  capacity: 1
+  envs:
+    A_TEST_ENV_NAME_1: a_test_env_value_1
+    A_TEST_ENV_NAME_2: a_test_env_value_2
+  env_file: .env
+  timeout: 3h
+  shutdown_timeout: 0s
+  insecure: false
+  fetch_timeout: 5s
+  fetch_interval: 2s
+  github_mirror: ''
+  labels:
+    - "ubuntu-latest:docker://docker.gitea.com/runner-images:ubuntu-latest"
+    - "ubuntu-22.04:docker://docker.gitea.com/runner-images:ubuntu-22.04"
+    - "ubuntu-20.04:docker://docker.gitea.com/runner-images:ubuntu-20.04"
+
+cache:
+  enabled: true
+  dir: ""
+  host: "192.168.0.105"
+  port: 8088
+  external_server: ""
+
+container:
+  network: "gitea_gitea"
+  privileged: false
+  options:
+  workdir_parent:
+  valid_volumes: []
+  docker_host: ""
+  force_pull: true
+  force_rebuild: false
+  require_docker: false
+  docker_timeout: 0s
+
+host:
+  workdir_parent:
+```
 ## 📊 Использование
 
 ### Проверка подключения к Gitea
