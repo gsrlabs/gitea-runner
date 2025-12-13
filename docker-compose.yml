@@ -1,0 +1,20 @@
+services:
+  runner:
+    image: docker.io/gitea/act_runner:latest
+    container_name: gitea_act_runner
+    restart: unless-stopped
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "${GITEA_INSTANCE_URL}" 
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${RUNNER_TOKEN}"
+      GITEA_RUNNER_NAME: "home-server-runner"
+    volumes:
+      - ./config.yaml:/config.yaml
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gitea_network
+
+networks:
+  gitea_network:
+    external: true
