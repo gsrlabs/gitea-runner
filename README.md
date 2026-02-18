@@ -67,7 +67,7 @@ nano .env
 ```bash
 # Обязательные настройки
 RUNNER_TOKEN="YOUR_TOKEN_REGISTRATION"
-GITEA_INSTANCE_URL="https://gitea.your-domain.com"
+GITEA_INSTANCE_URL= "http://gitea:3000" #  Или "https://gitea.your-domain.com" если на другом сервере
 
 # Опциональные настройки
 RUNNER_LABELS="ubuntu-latest:docker://node:20-bullseye,ubuntu-22.04:docker://node:20-bullseye,self-hosted"
