@@ -68,9 +68,6 @@ nano .env
 # Обязательные настройки
 RUNNER_TOKEN="YOUR_TOKEN_REGISTRATION"
 GITEA_INSTANCE_URL= "http://gitea:3000" #  Или "https://gitea.your-domain.com" если на другом сервере
-
-# Опциональные настройки
-RUNNER_LABELS="ubuntu-latest:docker://node:20-bullseye,ubuntu-22.04:docker://node:20-bullseye,self-hosted"
 ```
 
 ### 4. Получение токена регистрации
@@ -135,11 +132,6 @@ docker compose ps
 ### Настройка лейблов раннера
 Лейблы определяют, какие задачи может выполнять раннер:
 
-```bash
-# В .env файле:
-RUNNER_LABELS="ubuntu-latest:docker://node:20-bullseye,ubuntu-22.04:docker://node:20-bullseye,self-hosted:host"
-```
-
 #### Формат лейблов:
 - `ubuntu-latest:docker://node:20-bullseye` — запускать в контейнере с образом Node.js
 - `self-hosted:host` — запускать непосредственно на хосте (без Docker)
@@ -159,7 +151,7 @@ docker run --rm gitea/act_runner:latest act_runner list-images
 cache:
   enabled: true
   dir: ""
-  host: "192.168.0.105"  # IP-адрес вашего сервера, замените на свой
+  host: "192.168.0.102"  # IP-адрес вашего сервера, замените на свой
   port: 8088
 ```
 
